@@ -90,7 +90,7 @@ while camara.isOpened():
             else:
                 posicion_mano_anterior_y = None
 
-        # -------------------- NUEVO CÍRCULO --------------------
+        # -------------------- CÍRCULO --------------------
         if cantidad_manos == 1 and not circulo_lateral_dibujado:
             lm = info_manos[0]
 
