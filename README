@@ -2,9 +2,6 @@ Primero tenes que isntalar python 3.11
 
 Para que funque tenes que poner en la consola 
 
-python -m venv env               # Crear entorno virtual 
-env\Scripts\activate            # Activar entorno en Windows
-
 pip install opencv-python mediapipe numpy pyserial
 
 
