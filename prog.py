@@ -90,7 +90,7 @@ while camara.isOpened():
             else:
                 posicion_mano_anterior_y = None
 
-        # -------------------- CÍRCULO --------------------
+        # -------------------- CiRCULO --------------------
         if cantidad_manos == 1 and not circulo_lateral_dibujado:
             lm = info_manos[0]
 
@@ -131,7 +131,7 @@ while camara.isOpened():
                 estado_circulo = 0
                 angulo_anterior_dedos = None
 
-        # -------------------- TRIÁNGULO --------------------
+        # -------------------- TRIANGULO --------------------
         if cantidad_manos == 2 and not triangulo_activo:
             if es_palma_abierta(info_manos[0]) and es_palma_abierta(info_manos[1]):
                 dist = distancia(lista_manos[0], lista_manos[1])
@@ -184,12 +184,12 @@ while camara.isOpened():
         p3 = (centro_x + tamaño, centro_y + tamaño)
         puntos = [p1, p2, p3]
         cv2.polylines(fotograma, [np.array(puntos, np.int32)], isClosed=True, color=(0, 128, 255), thickness=4)
-        cv2.putText(fotograma, 'Gesto: separar manos (triángulo)', (10, 60),
+        cv2.putText(fotograma, 'Gesto: separar manos (triangulo)', (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 128, 255), 2)
 
     if circulo_lateral_dibujado and circulo_lateral_posicion:
         cv2.circle(fotograma, circulo_lateral_posicion, 30, (255, 0, 0), -1)
-        cv2.putText(fotograma, 'Gesto: dedos inclinados (círculo)', (10, alto - 20),
+        cv2.putText(fotograma, 'Gesto: dedos inclinados (circulo)', (10, alto - 20),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
 
     cv2.imshow("Gestos", fotograma)
