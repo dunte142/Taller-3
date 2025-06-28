@@ -89,7 +89,7 @@ while camara.isOpened():
             if es_palma_abierta(lm):
                 mano_y = lm[0].y * alto
                 if posicion_mano_anterior_y is not None:
-                    if posicion_mano_anterior_y - mano_y > 20:
+                    if posicion_mano_anterior_y - mano_y > 50:
                         cuadrado_activo = True
                         cuadrado_tiempo = tiempo_actual
                         sonido_cuadrado.play()
