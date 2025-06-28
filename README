@@ -2,7 +2,7 @@ Primero tenes que instalar  python 3.11
 
 Para que funque tenes que poner en la consola 
 
-pip install opencv-python mediapipe numpy pyserial
+pip install opencv-python mediapipe numpy pyserial pygame
 
 
 Principalmente se usa 
