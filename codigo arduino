@@ -1,0 +1,59 @@
+#include <Servo.h>
+
+Servo miServo;
+const int pinServo = 9;
+const int pinLEDs = 6;
+const int pinBomba = 5;
+
+void setup() {
+  Serial.begin(9600);
+  miServo.attach(pinServo);
+  pinMode(pinLEDs, OUTPUT);
+  pinMode(pinBomba, OUTPUT);
+  
+  // Inicialmente todo apagado
+  miServo.write(0);
+  digitalWrite(pinLEDs, LOW);
+  digitalWrite(pinBomba, LOW);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char comando = Serial.read();
+    
+    switch(comando) {
+      case 'S': // Control del servo (Cuadrado)
+        for (int pos = 0; pos <= 180; pos += 1) {
+          miServo.write(pos);
+          delay(15);
+        }
+        for (int pos = 180; pos >= 0; pos -= 1) {
+          miServo.write(pos);
+          delay(15);
+        }
+        break;
+        
+      case 'L': // Control de LEDs (Triángulo)
+        // Efecto de luces intermitentes
+        for (int i = 0; i < 5; i++) {
+          digitalWrite(pinLEDs, HIGH);
+          delay(300);
+          digitalWrite(pinLEDs, LOW);
+          delay(300);
+        }
+        break;
+        
+      case 'B': // Control de bomba de agua (Círculo)
+        digitalWrite(pinBomba, HIGH);
+        delay(2000); // Encender bomba por 2 segundos
+        digitalWrite(pinBomba, LOW);
+        break;
+        
+      case 'A': // Apagar todo
+        miServo.write(0);
+        digitalWrite(pinLEDs, LOW);
+        digitalWrite(pinBomba, LOW);
+        break;
+    }
+  }
+}
