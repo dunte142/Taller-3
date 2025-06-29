@@ -1,20 +1,26 @@
 #include <Servo.h>
 
+// Pines de conexión
+const int pinLEDs = 6;      // Triángulo
+const int pinBomba = 5;     // Círculo
+const int pinServo = 9;     // Cuadrado
+
+// Variables
 Servo miServo;
-const int pinServo = 9;
-const int pinLEDs = 6;
-const int pinBomba = 5;
+bool estadoLEDs = false;
+bool estadoBomba = false;
+int posServo = 0;
 
 void setup() {
   Serial.begin(9600);
-  miServo.attach(pinServo);
+  
+  // Configurar pines
   pinMode(pinLEDs, OUTPUT);
   pinMode(pinBomba, OUTPUT);
+  miServo.attach(pinServo);
   
-  // Inicialmente todo apagado
-  miServo.write(0);
-  digitalWrite(pinLEDs, LOW);
-  digitalWrite(pinBomba, LOW);
+  // Inicializar en estado apagado
+  apagarTodo();
 }
 
 void loop() {
@@ -22,38 +28,54 @@ void loop() {
     char comando = Serial.read();
     
     switch(comando) {
-      case 'S': // Control del servo (Cuadrado)
-        for (int pos = 0; pos <= 180; pos += 1) {
-          miServo.write(pos);
-          delay(15);
-        }
-        for (int pos = 180; pos >= 0; pos -= 1) {
-          miServo.write(pos);
-          delay(15);
-        }
+      case 'L':  // Triángulo - LEDs
+        controlarLEDs();
         break;
         
-      case 'L': // Control de LEDs (Triángulo)
-        // Efecto de luces intermitentes
-        for (int i = 0; i < 5; i++) {
-          digitalWrite(pinLEDs, HIGH);
-          delay(300);
-          digitalWrite(pinLEDs, LOW);
-          delay(300);
-        }
+      case 'B':  // Círculo - Bomba
+        controlarBomba();
         break;
         
-      case 'B': // Control de bomba de agua (Círculo)
-        digitalWrite(pinBomba, HIGH);
-        delay(2000); // Encender bomba por 2 segundos
-        digitalWrite(pinBomba, LOW);
+      case 'S':  // Cuadrado - Servo
+        controlarServo();
         break;
         
-      case 'A': // Apagar todo
-        miServo.write(0);
-        digitalWrite(pinLEDs, LOW);
-        digitalWrite(pinBomba, LOW);
+      case 'A':  // Apagar todo
+        apagarTodo();
         break;
     }
   }
+}
+
+// Función para controlar LEDs (Triángulo)
+void controlarLEDs() {
+  digitalWrite(pinLEDs, HIGH);  // Encender
+  delay(5000);                  // Mantener 5 segundos
+  digitalWrite(pinLEDs, LOW);   // Apagar
+}
+
+// Función para controlar bomba (Círculo)
+void controlarBomba() {
+  digitalWrite(pinBomba, HIGH); // Activar bomba
+  delay(2000);                  // Encendida por 2 segundos
+  digitalWrite(pinBomba, LOW);  // Desactivar
+}
+
+// Función para controlar servo (Cuadrado)
+void controlarServo() {
+  for (posServo = 0; posServo <= 180; posServo += 1) {
+    miServo.write(posServo);
+    delay(15);
+  }
+  for (posServo = 180; posServo >= 0; posServo -= 1) {
+    miServo.write(posServo);
+    delay(15);
+  }
+}
+
+// Función para apagar todos los componentes
+void apagarTodo() {
+  digitalWrite(pinLEDs, LOW);
+  digitalWrite(pinBomba, LOW);
+  miServo.write(0);  // Posición inicial del servo
 }
