@@ -7,8 +7,7 @@ import time
 import pygame # type: ignore
 
 #este mensaje fue añadido desde la pc y hice push usando git
-#ahora estoy añadiendo lineas de texto
-
+#ahora estoy añadiendo lineas de texto 
 
 # -------------------- CONFIGURACIÓN DE AUDIO --------------------
 pygame.mixer.init()
