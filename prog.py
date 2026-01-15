@@ -6,7 +6,7 @@ import serial # type: ignore
 import time
 import pygame # type: ignore
 
-#ahora voy a probar cosas usando git
+#este mensaje fue añadido desde la pc y hice push usando git
 
 # -------------------- CONFIGURACIÓN DE AUDIO --------------------
 pygame.mixer.init()
