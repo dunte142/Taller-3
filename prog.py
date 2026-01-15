@@ -6,6 +6,8 @@ import serial # type: ignore
 import time
 import pygame # type: ignore
 
+#ahora voy a probar cosas usando git
+
 # -------------------- CONFIGURACIÓN DE AUDIO --------------------
 pygame.mixer.init()
 sonido_cuadrado = pygame.mixer.Sound("cuadrado.mp3")
