@@ -6,26 +6,25 @@ import serial # type: ignore
 import time
 import pygame # type: ignore
 
-#este mensaje fue añadido desde la pc y hice push usando git
-#ahora estoy añadiendo lineas de texto 
 
-# -------------------- CONFIGURACIÓN DE AUDIO --------------------
+
+#config  audio --------------------
 pygame.mixer.init()
 sonido_cuadrado = pygame.mixer.Sound("cuadrado.mp3")
 sonido_triangulo = pygame.mixer.Sound("triangulo.mp3")
 sonido_circulo = pygame.mixer.Sound("circulo.mp3")
 
-# -------------------- CONFIGURACIÓN ARDUINO --------------------
-arduino = serial.Serial('COM3', 9600)  # Cambia 'COM3' por tu puerto correcto
-time.sleep(2)  # Espera para establecer conexión
+#config arduino --------------------
+arduino = serial.Serial('COM3', 9600)  # cambia por el puerto donde esta enchufado el arduino
+time.sleep(2) 
 
-# Definición de comandos
-COMANDO_SERVO = b'S'    # Cuadrado - Servo
-COMANDO_LEDS = b'L'     # Triángulo - LEDs
-COMANDO_BOMBA = b'B'    # Círculo - Bomba
-COMANDO_APAGAR = b'A'   # Apagar todo
+#comandos
+COMANDO_SERVO = b'S'    # cuadrado - Servo
+COMANDO_LEDS = b'L'     # triangulo - LEDs
+COMANDO_BOMBA = b'B'    # circulo - Bomba
+COMANDO_APAGAR = b'A'   # apagar
 
-# -------------------- CONFIGURACIÓN MEDIAPIPE --------------------
+#config mediapipe --------------------
 mp_manos = mp.solutions.hands
 mp_dibujo = mp.solutions.drawing_utils
 manos = mp_manos.Hands(
@@ -34,10 +33,10 @@ manos = mp_manos.Hands(
     min_tracking_confidence=0.7
 )
 
-# -------------------- INICIALIZACIÓN CÁMARA --------------------
+#camara --------------------
 camara = cv2.VideoCapture(0)
 
-# -------------------- VARIABLES DE ESTADO --------------------
+#var estado --------------------
 cuadrado_activo = False
 cuadrado_tiempo = None
 
@@ -53,7 +52,7 @@ manos_juntas_anterior = None
 posicion_mano_anterior_y = None
 angulo_anterior_dedos = None
 
-# -------------------- FUNCIONES AUXILIARES --------------------
+#funciones --------------------
 def distancia(p1, p2):
     return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
 
@@ -72,7 +71,7 @@ def es_puno(lm):
     dedos_base = [5, 9, 13, 17]
     return all(lm[p].y > lm[b].y for p, b in zip(dedos_punta, dedos_base))
 
-# -------------------- BUCLE PRINCIPAL --------------------
+#bucle --------------------
 while camara.isOpened():
     exito, fotograma = camara.read()
     if not exito:
@@ -97,7 +96,7 @@ while camara.isOpened():
             punto9 = lm[9]
             lista_manos.append((punto9.x * ancho, punto9.y * alto))
 
-        # -------------------- CUADRADO (SERVO) --------------------
+        #cuadrado (serv)--------------------
         if cantidad_manos == 1 and not cuadrado_activo:
             lm = info_manos[0]
             if es_palma_abierta(lm):
@@ -113,7 +112,7 @@ while camara.isOpened():
             else:
                 posicion_mano_anterior_y = None
 
-        # -------------------- CÍRCULO (BOMBA) --------------------
+        #circulo (bomba)--------------------
         if cantidad_manos == 1 and not circulo_lateral_dibujado:
             lm = info_manos[0]
 
@@ -151,7 +150,7 @@ while camara.isOpened():
                 estado_circulo = 0
                 angulo_anterior_dedos = None
 
-        # -------------------- TRIÁNGULO (LEDS) --------------------
+        #triangulo (leds)--------------------
         if cantidad_manos == 2 and not triangulo_activo:
             if es_palma_abierta(info_manos[0]) and es_palma_abierta(info_manos[1]):
                 dist = distancia(lista_manos[0], lista_manos[1])
@@ -174,7 +173,7 @@ while camara.isOpened():
     if manos_juntas is not None:
         manos_juntas_anterior = manos_juntas
 
-    # -------------------- LIMPIEZA AUTOMÁTICA --------------------
+    #limpiar--------------------
     if cuadrado_activo and tiempo_actual - cuadrado_tiempo > 10:
         cuadrado_activo = False
         cuadrado_tiempo = None
@@ -194,7 +193,7 @@ while camara.isOpened():
         arduino.write(COMANDO_APAGAR)
         print("Componentes apagados - Tiempo agotado")
 
-    # -------------------- DIBUJAR FORMAS --------------------
+    #dibujar--------------------
     if cuadrado_activo:
         tamaño = 60
         centro = (ancho // 3, alto // 2)
@@ -226,7 +225,7 @@ while camara.isOpened():
         arduino.write(COMANDO_APAGAR)
         break
 
-# -------------------- LIMPIEZA FINAL --------------------
+#limpiar2--------------------
 camara.release()
 cv2.destroyAllWindows()
 
